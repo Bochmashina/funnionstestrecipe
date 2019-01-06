@@ -1,0 +1,89 @@
+﻿@model IEnumerable<WebApplication1.Models.Jokes>
+@{
+    ViewBag.Title = "Начална страница";
+}
+
+@*<div class="jumbotron">
+        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    </div>*@
+
+@*<div class="row">
+        <div class="col-md-4">
+            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+            <input type="button" id="btnFacebookLogin" value="Login with Facebook" class="btn btn-success" />
+        </div>
+    </div>*@
+
+<h1>Добре дошли@(User.Identity.IsAuthenticated ? ", " + HttpContext.Current.User.Identity.Name : "")</h1>
+
+<h2><center>Вицове</center></h2>
+<input class="row" type=button onclick="GetRandomJoke()" value="Случаен виц" />
+<div class="row"></div>
+<input type="text" id="inputCat" name="inputCat" />
+<input type=button onclick="GetJokesByCat(document.getElementById('inputCat').value)" value="Търси по категория" />
+<div class="fb-share-button" data-href="https://localhost:44341/Home/Index" data-width="100px" data-type="box_count"></div>
+@if (User.Identity.IsAuthenticated)
+{
+    <input type="text" id="addJokeCont" name="addJokeCont" />
+    <input type="text" id="addJokeCat" name="addJokeCat" />
+    <input type="button" onclick="AddJokeToDatabase(document.getElementById('addJokeCont').value, document.getElementById('addJokeCat').value)" value="Добави виц" />
+}
+<center><div style="display:none" class="row" id="divRandJoke"></div></center>
+@*<table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categories)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Categories)
+                </td>
+            </tr>
+        }
+
+    </table>*@
+<script type="text/javascript">
+    //$(document).ready(function ())
+    //{
+    //    getAccessToken();
+
+    //    $('#btnFacebookLogin').click(function ())
+    //    {
+    //        window.location.href = "/api/Account/ExternalLogin?provider=Facebook&response_type=token&client_id=self"
+    //    });
+    //}
+    function GetRandomJoke() {
+        document.getElementById('divRandJoke').style.display = 'block'
+        $.get("/Home/btnRandomJoke_Click", function (data) {
+            $("#divRandJoke").html(data);
+        });
+    }
+
+    function GetJokesByCat(cat) {
+        if (cat === undefined || cat === "" || cat === " ") {
+            cat = "nqmatakavakategoriq"; //стойност по подразбиране
+        }
+        document.getElementById('divRandJoke').style.display = 'block'
+        $.get("/Home/GetJokesByCategory", {category:cat}, function (data) {
+            $("#divRandJoke").html(data);
+        });
+    }
+
+    function AddJokeToDatabase(cont, cat) {
+        if(@User.Identity.IsAuthenticated)
+        $.get("/Home/AddJokeToDatabase", { content: cont, categories: cat }, function (data) { });
+    }
+
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
