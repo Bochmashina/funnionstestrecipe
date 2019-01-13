@@ -17,12 +17,11 @@
     </div>*@
 
 <h1>Добре дошли@(User.Identity.IsAuthenticated ? ", " + HttpContext.Current.User.Identity.Name : "")</h1>
-GetJokesByCat
 <div class="col-lg-3">
     <center>
         <h3>Категории</h3>
         <input type=button onclick="GetJokesByCat('Веселин Маринов')" value="Веселин Маринов" /><br /><br />
-        <input type=button onclick="('програмист')" value="Програмист" /><br /><br />
+        <input type=button onclick="GetJokesByCat('програмист')" value="Програмист" /><br /><br />
         <input type=button onclick="GetJokesByCat('блондинка')" value="Блондинка" /><br /><br />
     </center>
 </div>
