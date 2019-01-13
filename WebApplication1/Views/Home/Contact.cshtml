@@ -1,17 +1,30 @@
 ﻿@{
-    ViewBag.Title = "Contact";
+    ViewBag.Title = "Добавяне на виц";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<center><h2>@ViewBag.Title</h2></center>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+@if (User.Identity.IsAuthenticated)
+{
+    <center>
+        <div class="row">
+            <p>Съдържание:</p> <input class="row" type="text" id="addJokeCont" name="addJokeCont" />
+        </div>
+        <br />
+        <div class="row">
+            <p>Категории:</p> <input type="text" id="addJokeCat" name="addJokeCat" />
+        </div>
+        <br />
+        <div class="row">
+            <input type="button" onclick="AddJokeToDatabase(document.getElementById('addJokeCont').value, document.getElementById('addJokeCat').value)" value="Добави виц" />
+        </div>
+    </center>
+}
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+<script type="text/javascript">
+    function AddJokeToDatabase(cont, cat) {
+        if (cont != "" && cat != "") {
+            $.get("/Home/AddJokeToDatabase", { content: cont, categories: cat }, function (data) { });
+        }
+    }
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

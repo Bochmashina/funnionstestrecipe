@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
+    //[SessionState(System.Web.SessionState.SessionStateBehavior.ReadOnly)] - for parallel work
     public class HomeController : Controller
     {
         JokesEntities db = new JokesEntities();
@@ -18,7 +17,6 @@ namespace WebApplication1.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
@@ -38,7 +36,9 @@ namespace WebApplication1.Controllers
             {
                 if (item.Id == randomJokeId)
                 {
-                    message = "<br>" + item.Content;
+                    string cont = item.Content;
+                    cont = cont.Replace("br", "<br>");
+                    message = "<br>" + cont;
                     break;
                 }
             }
@@ -50,9 +50,11 @@ namespace WebApplication1.Controllers
             string jokes = "";
             foreach (var item in db.Jokes)
             {
-                if (item.Categories.Contains(category))
+                if (item.Categories.Contains(category) || item.Content.Contains(category))
                 {
-                    jokes += "<br>" + item.Content + "<br>";
+                    string cont = item.Content;
+                    cont = cont.Replace("br", "<br>");
+                    jokes += "<br>" + cont + "<br>";
                 }
             }
             if(jokes=="")

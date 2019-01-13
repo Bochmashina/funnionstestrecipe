@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<WebApplication1.Models.Jokes>
 @{
+    /**/
+
     ViewBag.Title = "Начална страница";
 }
 
@@ -15,54 +17,32 @@
     </div>*@
 
 <h1>Добре дошли@(User.Identity.IsAuthenticated ? ", " + HttpContext.Current.User.Identity.Name : "")</h1>
+GetJokesByCat
+<div class="col-lg-3">
+    <center>
+        <h3>Категории</h3>
+        <input type=button onclick="GetJokesByCat('Веселин Маринов')" value="Веселин Маринов" /><br /><br />
+        <input type=button onclick="('програмист')" value="Програмист" /><br /><br />
+        <input type=button onclick="GetJokesByCat('блондинка')" value="Блондинка" /><br /><br />
+    </center>
+</div>
+<div class="col-lg-9">
+    <h2><center>Вицове</center></h2>
+    <br />
+    <center>
+        <div class="row">
+            <input type="text" id="inputCat" name="inputCat" />
+            <input type=button onclick="GetJokesByCat(document.getElementById('inputCat').value)" value="Търси по категория" />
+        </div>
+    </center>
+    <br />
+    <center><input class="row" type=button onclick="GetRandomJoke()" value="Случаен виц" /></center>
+    <div style="display:none" class="row" id="divRandJoke"></div>
+    <br />
+    <center><div class="fb-share-button" data-href="https://localhost:44341/Home/Index" data-width="100px" data-type="box_count"></div></center>
 
-<h2><center>Вицове</center></h2>
-<input class="row" type=button onclick="GetRandomJoke()" value="Случаен виц" />
-<div class="row"></div>
-<input type="text" id="inputCat" name="inputCat" />
-<input type=button onclick="GetJokesByCat(document.getElementById('inputCat').value)" value="Търси по категория" />
-<div class="fb-share-button" data-href="https://localhost:44341/Home/Index" data-width="100px" data-type="box_count"></div>
-@if (User.Identity.IsAuthenticated)
-{
-    <input type="text" id="addJokeCont" name="addJokeCont" />
-    <input type="text" id="addJokeCat" name="addJokeCat" />
-    <input type="button" onclick="AddJokeToDatabase(document.getElementById('addJokeCont').value, document.getElementById('addJokeCat').value)" value="Добави виц" />
-}
-<center><div style="display:none" class="row" id="divRandJoke"></div></center>
-@*<table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categories)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Content)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Categories)
-                </td>
-            </tr>
-        }
-
-    </table>*@
+</div>
 <script type="text/javascript">
-    //$(document).ready(function ())
-    //{
-    //    getAccessToken();
-
-    //    $('#btnFacebookLogin').click(function ())
-    //    {
-    //        window.location.href = "/api/Account/ExternalLogin?provider=Facebook&response_type=token&client_id=self"
-    //    });
-    //}
     function GetRandomJoke() {
         document.getElementById('divRandJoke').style.display = 'block'
         $.get("/Home/btnRandomJoke_Click", function (data) {
@@ -75,14 +55,9 @@
             cat = "nqmatakavakategoriq"; //стойност по подразбиране
         }
         document.getElementById('divRandJoke').style.display = 'block'
-        $.get("/Home/GetJokesByCategory", {category:cat}, function (data) {
+        $.get("/Home/GetJokesByCategory", { category: cat }, function (data) {
             $("#divRandJoke").html(data);
         });
-    }
-
-    function AddJokeToDatabase(cont, cat) {
-        if(@User.Identity.IsAuthenticated)
-        $.get("/Home/AddJokeToDatabase", { content: cont, categories: cat }, function (data) { });
     }
 
 </script>
